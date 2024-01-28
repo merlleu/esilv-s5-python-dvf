@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>DVF - {{ visu.name }}</title>
+    <link rel="stylesheet" href="{% static 'visu.css' %}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static 'visu.js' %}"></script>
+</head>
+
+<body>
+    <h1><a href="/">Accueil</a> {{ visu.name }}</h1>
+    <form>
+        <input type="hidden" name="id" value="{{ visu.id }}">
+        {% for option in visu.options %}
+        <label>{{ option.name }}:</label>
+        <select name="opt_{{ option.id }}">
+            {% for choice in option.choices %}
+            <option value="{{ choice.id }}" data-exclusive="{{ choice.exclusive|default:'false' }}"  {% if option.choice == choice.id %}selected{% endif %}>{{ choice.name }}</option>
+            {% endfor %}
+        </select>
+        {% endfor %}
+        <button type="submit" onclick="show_loading_modal()">Valider</button>
+    </form>
+
+    <div id="visu">
+        <!-- Visualisation -->
+        {{ visu_html|safe }}
+    </div>
+    <div id="loading-modal" class="loading-modal">
+        <div class="loading-spinner"></div>
+    </div>
+</body>
+
+</html>
